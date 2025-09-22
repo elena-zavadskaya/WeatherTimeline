@@ -19,7 +19,12 @@ class HomeViewModel(
     private val permissionManager: PermissionManager
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(HomeUiState())
+    private val _uiState = MutableStateFlow(
+        HomeUiState(
+            selectedDate = LocalDate.now(),
+            selectedTime = LocalTime.now()
+        )
+    )
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
     private val _locationState = MutableStateFlow<LocationState>(LocationState.Idle)
@@ -90,18 +95,18 @@ class HomeViewModel(
         viewModelScope.launch {
             val currentState = _uiState.value
             val location = currentState.locationData
-            val date = currentState.selectedDate
+
+            val dateToUse = currentState.selectedDate ?: LocalDate.now()
+            val timeToUse = currentState.selectedTime ?: LocalTime.now()
+
+            _uiState.value = currentState.copy(
+                selectedDate = dateToUse,
+                selectedTime = timeToUse
+            )
 
             if (location == null) {
                 _uiState.value = currentState.copy(
                     error = "Определение местоположения... Попробуйте еще раз через несколько секунд."
-                )
-                return@launch
-            }
-
-            if (date == null) {
-                _uiState.value = currentState.copy(
-                    error = "Необходимо выбрать дату"
                 )
                 return@launch
             }
@@ -112,8 +117,8 @@ class HomeViewModel(
                 val result = getWeatherUseCase(
                     latitude = location.latitude,
                     longitude = location.longitude,
-                    date = date,
-                    time = currentState.selectedTime
+                    date = dateToUse,
+                    time = timeToUse
                 )
 
                 if (result.isSuccess) {
@@ -124,7 +129,9 @@ class HomeViewModel(
                         weatherDescription = weatherData.getWeatherDescription(),
                         windSpeed = "${weatherData.windSpeed.toInt()} km/h",
                         humidity = "${weatherData.humidity}%",
-                        error = null
+                        error = null,
+                        selectedDate = dateToUse,
+                        selectedTime = timeToUse
                     )
                 } else {
                     _uiState.value = currentState.copy(
