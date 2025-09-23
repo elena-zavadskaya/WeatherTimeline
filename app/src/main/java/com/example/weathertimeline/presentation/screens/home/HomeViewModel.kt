@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.weathertimeline.domain.model.LocationData
 import com.example.weathertimeline.domain.usecase.GetCurrentLocationUseCase
 import com.example.weathertimeline.domain.usecase.GetWeatherUseCase
+import com.example.weathertimeline.domain.usecase.SaveWeatherHistoryUseCase
 import com.example.weathertimeline.presentation.utils.PermissionManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,6 +17,7 @@ import java.time.LocalTime
 class HomeViewModel(
     private val getCurrentLocationUseCase: GetCurrentLocationUseCase,
     private val getWeatherUseCase: GetWeatherUseCase,
+    private val saveWeatherHistoryUseCase: SaveWeatherHistoryUseCase,
     private val permissionManager: PermissionManager
 ) : ViewModel() {
 
@@ -123,6 +125,9 @@ class HomeViewModel(
 
                 if (result.isSuccess) {
                     val weatherData = result.getOrThrow()
+
+                    saveWeatherHistoryUseCase(weatherData)
+
                     _uiState.value = currentState.copy(
                         isLoading = false,
                         temperature = "${weatherData.temperature.toInt()}°C",

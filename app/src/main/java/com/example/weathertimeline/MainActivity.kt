@@ -3,6 +3,7 @@ package com.example.weathertimeline
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import com.example.weathertimeline.di.databaseModule
 import com.example.weathertimeline.di.locationModule
 import com.example.weathertimeline.di.networkModule
 import com.example.weathertimeline.presentation.WeatherApp
@@ -16,7 +17,7 @@ class MainActivity : ComponentActivity() {
 
         startKoin {
             androidContext(this@MainActivity)
-            modules(networkModule, locationModule)
+            modules(networkModule, locationModule, databaseModule)
         }
 
         setContent {
