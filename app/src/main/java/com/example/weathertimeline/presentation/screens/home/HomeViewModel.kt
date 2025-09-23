@@ -126,7 +126,11 @@ class HomeViewModel(
                 if (result.isSuccess) {
                     val weatherData = result.getOrThrow()
 
-                    saveWeatherHistoryUseCase(weatherData)
+                    saveWeatherHistoryUseCase(
+                        weatherData = weatherData,
+                        selectedDate = dateToUse,
+                        selectedTime = timeToUse
+                    )
 
                     _uiState.value = currentState.copy(
                         isLoading = false,

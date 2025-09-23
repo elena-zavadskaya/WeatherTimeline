@@ -4,12 +4,18 @@ import com.example.weathertimeline.domain.model.WeatherData
 import com.example.weathertimeline.domain.repository.WeatherHistoryRepository
 import java.time.LocalDateTime
 
-class SaveWeatherHistoryUseCase (
+class SaveWeatherHistoryUseCase(
     private val weatherHistoryRepository: WeatherHistoryRepository
 ) {
-    suspend operator fun invoke(weatherData: WeatherData) {
+    suspend operator fun invoke(
+        weatherData: WeatherData,
+        selectedDate: java.time.LocalDate,
+        selectedTime: java.time.LocalTime
+    ) {
+        val weatherDateTime = LocalDateTime.of(selectedDate, selectedTime)
+
         val weatherHistory = com.example.weathertimeline.domain.model.WeatherHistory(
-            dateTime = LocalDateTime.now(),
+            dateTime = weatherDateTime,
             latitude = weatherData.location.latitude,
             longitude = weatherData.location.longitude,
             temperature = weatherData.temperature,
