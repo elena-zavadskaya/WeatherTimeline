@@ -32,15 +32,20 @@ WeatherTimeline - Android-приложение для просмотра ист�
 ### Структура пакетов:
 ``` text
 com.example.weathertimeline/
-├── presentation/          # UI слой
+├── presentation/         # UI слой
 │   ├── screens/          # Экраны приложения
 │   ├── components/       # Composable компоненты
 │   ├── navigation/       # Навигация
-│   └── utils/           # Вспомогательные классы
+│   ├── ui/               # Стили
+│   └── utils/            # Вспомогательные классы
 ├── domain/               # Доменный слой
-│   ├── model/           # Модели данных
-│   ├── repository/      # Интерфейсы репозиториев
-│   └── usecase/         # Use Cases
-└── data/                # Data слой
-    └── repository/      # Реализации репозиториев
+│   ├── model/            # Модели данных
+│   ├── repository/       # Интерфейсы репозиториев
+│   └── usecase/          # Use Cases
+├── data/                 # Data слой
+│   ├── api/              # API погоды
+│   ├── local/            # База данных
+│   ├── model/            # Модели данных
+│   └── repository/       # Реализации репозиториев
+└── di                    # Зависимости
 ```
